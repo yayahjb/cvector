@@ -1,0 +1,16 @@
+ Test 0: Create vector and load it with 1000000 elements.
+Size 1, capacity 1.
+Size 131073, capacity 262144.
+Size 262145, capacity 524288.
+Size 393217, capacity 524288.
+Size 524289, capacity 1048576.
+Size 655361, capacity 1048576.
+Size 786433, capacity 1048576.
+Size 917505, capacity 1048576.
+ Test 1: Reference elements of CVector as an array.
+ Test 2: Reference elements of CVector via CVectorGetElement.
+ Test 3: Reference elements of CVector via CVectorGetElementptr.
+ Test 4: Set elements of CVector as an array
+ Test 5: Set elements of CVector via CVectorSetElement.
+ Test 6: Remove elements of CVector via CVectorRemoveElement.
+ Test 7: Remove all elements of CVector via CVectorClear.

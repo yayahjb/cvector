@@ -1,0 +1,177 @@
+<html>
+<head>
+<title>REAME CVector -- API for Dynamic Arrays</title>
+</head>
+<body bgcolor="FFFFFF">
+<font face="Arial,Helevtica,Times" size=4>
+
+<h3 align="center">CVector -- ANSI C API for Dynamic Arrays</h3>
+<P>
+<center>
+&#169; 2008 Herbert J. Bernstein<br/>
+<script language="javascript" type="text/javascript">
+<!-- 
+      var name = "yaya";
+      var domain = "bernstein-plus-sons";
+      var domext = "com";
+      document.write ("<a href=\"mailto:" + name + "@" + domain + "." + domext + "\"style=\"text-decoration:none\">" + name + " <b>at</b> " + domain + " <b>dot</b> " + domext+"</a>");
+// -->
+</script>
+<noscript>
+yaya <b>at</b> bernstein-plus-sons <b>dot</b> com
+</noscript><br />
+You may distribute the CVector API under the <a href=lgpl.txt style="text-decoration:none">LGPL</a><br />
+</center>
+<P>
+CVector is an ANSI C implementation of dynamic arrays to provide a crude approximation to the C++ vector class.
+
+<h4>Synopsis</h4>
+<P>
+#include &lt;CVector.h&gt;
+<P>    
+    <i>int</i> <br /><b>CVectorCreate</b>(<i>CVectorHandle</i> <i>*</i> <i>vectorhandle</i>, <i>size_t</i> <i>elementsize</i>, <i>size_t</i> <i>capacity</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorAddElement</b>(<i>CVectorHandle</i> <i>vectorhandle</i>,  <i>void</i> <i>*</i> <i>element</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorGetElement</b>(<i>CVectorHandle</i> <i>vectorhandle</i>,  <i>void</i> <i>*</i> <i>element</i>, <i>size_t</i> <i>index</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorGetElementptr</b>(<i>CVectorHandle</i> <i>vectorhandle</i>,  <i>void</i> <i>*</i>* <i>elementptr</i>, <i>size_t</i> <i>index</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorSetElement</b>(<i>CVectorHandle</i> <i>vectorhandle</i>,  <i>void</i> <i>*</i> <i>element</i>, <i>size_t</i> <i>index</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorRemoveElement</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>size_t</i> <i>index</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorClear</b>(<i>CVectorHandle</i> <i>vectorhandle</i>);
+<p>    
+    <i>int</i> <br /><b>CVectorFree</b>(<i>CVectorHandle</i> <i>*</i> <i>vectorhandle</i>);
+<p>    
+    <i>size_t</i> <br /><b>CVectorCapacity</b>(<i>CVectorHandle</i> <i>vectorhandle</i>);    
+<p>    
+    <i>int</i> <br /><b>CVectorGetCapacity</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>size_t</i> <i>*</i> <i>capacity</i>);
+<p>    
+    <i>size_t</i>  <br /><b>CVectorSize</b>(<i>CVectorHandle</i> <i>vectorhandle</i>);
+<p>
+    
+    <i>int</i> <br /><b>CVectorGetSize</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>size_t</i> <i>*</i> <i>size</i>);
+<p>
+    
+    <i>int</i> <br /><b>CVectorGetFlags</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>int</i> <i>*</i> <i>flags</i>);
+<p>
+    
+    <i>int</i> <br /><b>CVectorSetCapacity</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>size_t</i> <i>capacity</i>);       
+<p>
+    
+    <i>int</i> <br /><b>CVectorSetSize</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>size_t</i> <i>size</i>);
+<p>
+    
+    <i>int</i> <br /><b>CVectorSetFlags</b>(<i>CVectorHandle</i> <i>vectorhandle</i>, <i>int</i> <i>flags</i>);
+<p>
+<h4>Description</h4>
+<P>
+The CVector.h header file defines the <i>CVectorHandle</i> type as a dynamic array for elements in which each element uses <i>elementsize</i>
+characters in a block of memory <i>elementsize</i>*<i>capacity</i> characters long.  There are <i>size</i> elements used in the array
+each with an <i>index</i> between 0 and <i>size</i>-1.  <b>CVectorCreate</b>() is used to create the dynamic array.  Elements may either be 
+added at the end of the dynamic array using <b>CVectorAddElement</b>(), or in arbitrary order with <b>CVectorSetElement</b>().  Elements may
+be examined with copy semantics using <b>CVectorGetElement</b>() or as pointers directly into the dynamic array using <b>CVectorGetElementptr</b>().
+Caution must be used in using pointers because expansion of the dynamic array can force relocation of all data in the dynamic array.  Therefore,
+any use of <b>CVectorGetElementptr</b>() sets a flag, CVECTOR_FLAGS_NO_RELOCATION, that disables any further array relocation, which will prevent
+the extension of the <i>size</i> array beyond the <i>capacity</i> in effect at the time of the first <b>CVectorGetElementptr</b>() call.  The functions
+<b>CVectorGetFlags</b>() and <b>CVectorSetFlags</b>() can be used to reset this flag (see Examples below).  The function <b>CVectorRemoveElement</b>()
+will remove the element of the indicated <i>index</i>, shifting all elements of higher indices down, unless the flag CVECTOR_FLAGS_NO_RELOCATION is set.
+The capacity, size and flags may be examined or set with <b>CVectorCapacity</b>(), <b>CVectorGetCapacity</b>(), <b>CVectorSize</b>(), 
+<b>CVectorGetSize</b>(), <b>CVectorGetFlags</b>, <b>CVectorSetCapacity</b>(), <b>CVectorSetSize</b>() and <b>CVectorSetFlags()</b>.
+
+<p>
+External declarations as well as the CVector structure definition, and the CVectorHandle definition are included in the &lt;<i>CVector.h</i>&gt; 
+include file.  The CVector structure includes at least the following fields:
+<p>
+<blockquote>
+<table border="0">
+         <tr><td>size_t size;             </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* size of the vector      */</td></tr>
+         <tr><td>size_t capacity;         </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* capacity of the vector  */</td></tr>
+         <tr><td>size_t elementsize;      </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* size of an element      */</td></tr>
+         <tr><td>void * array;            </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* the array of elements   */</td></tr>
+         <tr><td>int flags;               </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* flags                   */</td></tr>
+</table>
+</blockquote>
+</p>
+<p>
+The valid flags are CVECTOR_FLAGS_NO_RELOCATION  and CVECTOR_FLAGS_NO_RESIZE which may be ORed.
+</p>
+<p>
+<h4>Returns</h4>
+<p>
+The functions <b>CVectorCapacity</b>() and <b>CVectorSize</b>() are implemented as macros and return the CVector <i>capacity</i> and
+<i>size</i> directly.  While they could be used as lvalues, such use is not recommended and is not guaranteed to work in future versions
+of CVector.  All other functions return 0 for normal completion, or the sum of one or more of the following non-zero error codes:
+<p>
+<blockquote>
+<table border="0">
+         <tr><td>Error Return          </td><td>Numeric Value              </td><td>&nbsp;&nbsp;&nbsp;Meaning</td></tr>
+         <tr><td>CVECTOR_MALLOC_FAILED </td><td>&nbsp;&nbsp;&nbsp;-1       </td><td>&nbsp;&nbsp;&nbsp;/* A call to allocate memory failed  */</td></tr>
+         <tr><td>CVECTOR_BAD_ARGUMENT  </td><td>&nbsp;&nbsp;&nbsp;-2       </td><td>&nbsp;&nbsp;&nbsp;/* An argument is not valid          */</td></tr>
+         <tr><td>CVECTOR_NOT_FOUND     </td><td>&nbsp;&nbsp;&nbsp;-4       </td><td>&nbsp;&nbsp;&nbsp;/* An element could not be found     */</td></tr>
+         <tr><td>CVECTOR_NO_RELOCATION </td><td>&nbsp;&nbsp;&nbsp;-8       </td><td>&nbsp;&nbsp;&nbsp;/* Relocation is not permitted       */</td></tr>
+         <tr><td>CVECTOR_NO_RESIZE     </td><td>&nbsp;&nbsp;&nbsp;-16      </td><td>&nbsp;&nbsp;&nbsp;/* A change is size is not permitted */</td></tr>
+
+</table>
+</blockquote>
+</p>
+<p>
+<h4>Examples</h4>
+<p>
+To create a vector of doubles, starting with minimal capacity, reporting failure to stderr:
+<P>
+<pre><tt>
+        #include &lt;CVector.h&gt;
+        ...
+        CvectorHandle vectorhandle;
+        ...
+        if (CVectorCreate(&vectorhandle,sizeof(double),1)) fprintf(stderr," CVectorCreate failed!!\n");
+</tt></pre>
+<P>
+To create a vector of arrays of or pointers to doubles:
+<P>
+<pre><tt>
+        #include &lt;CVector.h&gt;
+        ...
+        CvectorHandle vectorhandle;
+        ...
+        if (CVectorCreate(&vectorhandle,sizeof(double *),1)) fprintf(stderr," CVectorCreate failed!!\n");
+</tt></pre>
+<p>
+To pop the last element of a vector of doubles:
+<p>
+<pre><tt>
+        #include &lt;CVector.h&gt;
+        ...
+        CvectorHandle vectorhandle;
+        double element;
+        ...
+        if (CVectorGetElement(vectorhandle, &element, (CVectorSize(vectorhandle)-1)) 
+            fprintf(stderr," Failed CVectorGetElement);
+        if (CVectorRemoveElement(vectorhandle,  (CVectorSize(vectorhandle)-1)) 
+            fprintf(stderr," Failed CVectorRemoveElement);
+</tt></pre>
+
+<p>
+See the test program <a href="CVectorBasicTest.c">CVectorBasicTest.c</a>
+
+<hr>
+<font size="2">
+Updated 8 December 2008<br />
+<script language="javascript" type="text/javascript">
+<!-- 
+      var name = "yaya";
+      var domain = "bernstein-plus-sons";
+      var domext = "com";
+      document.write ("<a href=\"mailto:" + name + "@" + domain + "." + domext + "\" style=\"text-decoration:none\">" + name + " <b>at</b> " + domain + " <b>dot</b> " + domext+"</a>");
+// -->
+</script>
+<noscript>
+yaya <b>at</b> bernstein-plus-sons <b>dot</b> com
+</noscript>
+</font>
+</font>
+</body>
+</html>
