@@ -93,7 +93,7 @@ SOURCE   =  $(SRC)/CVector.c
 #
 # Header files
 #
-HEADERS   =  $(INCLUDE)/CVector.h                  \
+HEADERS   =  $(INCLUDE)/CVector.h
 
 # Default: instructions
 #
@@ -145,11 +145,11 @@ all:	$(LIB) $(BIN) $(SOURCE) $(HEADERS) \
 		$(BIN)/CVectorBasicTest
 		
 install:  all $(INSTALLDIR) $(INSTALLDIR)/lib $(INSTALLDIR)/include \
-          $(HEADERS) $(HEADERS)/CVector.h $(LIB)/libCvector.a
+          $(INCLUDE) $(HEADERS) $(LIB)/libCvector.a
 		  -cp $(INSTALLDIR)/lib/libCVector.a $(INSTALLDIR)/lib/libCVector_old.a
 		  cp $(LIB)/libCvector.a $(INSTALLDIR)/lib/libCVector.a
 		  -cp $(INSTALLDIR)/include/CVector.h $(INSTALLDIR)/include/CVector_old.h
-		  cp $(HEADERS)/Cvector.h $(INSTALLDIR)/include/CVector.h
+		  cp $(INCLUDE)/Cvector.h $(INSTALLDIR)/include/CVector.h
 		  chmod 644 $(INSTALLDIR)/lib/libCVector.a
 		  chmod 644 $(INSTALLDIR)/include/CVector.h
 		  
