@@ -342,8 +342,6 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
     
     int CVectorSetSize(CVectorHandle vectorhandle, size_t size) {
 
-        void FAR * temparray;
-        
         int errorcode;
         
         if (!(vectorhandle) ) return CVECTOR_BAD_ARGUMENT;
