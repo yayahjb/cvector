@@ -145,7 +145,7 @@ all:	$(LIB) $(BIN) $(SOURCE) $(HEADERS) \
 		$(BIN)/CVectorBasicTest
 		
 install:  all $(INSTALLDIR) $(INSTALLDIR)/lib $(INSTALLDIR)/include \
-          $(INCLUDE) $(HEADERS) $(LIB)/libCvector.a
+          $(INCLUDE) $(HEADERS) $(LIB)/libCVector.a
 		  -cp $(INSTALLDIR)/lib/libCVector.a $(INSTALLDIR)/lib/libCVector_old.a
 		  cp $(LIB)/libCvector.a $(INSTALLDIR)/lib/libCVector.a
 		  -cp $(INSTALLDIR)/include/CVector.h $(INSTALLDIR)/include/CVector_old.h
