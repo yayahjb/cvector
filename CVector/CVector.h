@@ -78,7 +78,7 @@ extern "C" {
         size_t capacity;         /* capacity of the vector  */
         size_t elementsize;      /* size of an element      */
         void FAR * array;        /* the array of elements   */
-        int flags;               /* flags                   */
+        unsigned int flags;      /* flags                   */
     } CVector;
     
     typedef CVector FAR * CVectorHandle;
@@ -86,7 +86,7 @@ extern "C" {
     
     /*  CVectorAddElement -- add an element to a CVector */
     
-    int CVectorAddElement(CVectorHandle vectorhandle, void FAR * element);
+    int CVectorAddElement(const CVectorHandle vectorhandle, const void FAR * element);
 
     /* CVectorCapacity -- macro to return the CVector capacity */
     
@@ -94,11 +94,11 @@ extern "C" {
     
     /* CVectorClear -- clear a generic vector */
     
-    int CVectorClear(CVectorHandle vectorhandle);
+    int CVectorClear(const CVectorHandle vectorhandle);
 
     /* CVectorCreate -- create a CVector */
     
-    int CVectorCreate(CVectorHandle FAR * vectorhandle, size_t elementsize, size_t capacity);
+    int CVectorCreate(CVectorHandle FAR * vectorhandle, const size_t elementsize, const size_t capacity);
         
     /* CVectorFree -- remove a CVector */
     
@@ -106,43 +106,43 @@ extern "C" {
     
     /* CVectorGetCapacity - function to return the CVector capacity */
     
-    int CVectorGetCapacity(CVectorHandle vectorhandle, size_t FAR * capacity);
+    int CVectorGetCapacity(const CVectorHandle vectorhandle, size_t FAR * capacity);
     
     /* CVectorGetElement -- get a copy of an element from a CVector */
     
-    int CVectorGetElement(CVectorHandle vectorhandle, void FAR * element, size_t index);
+    int CVectorGetElement(const CVectorHandle vectorhandle, void FAR * element, const size_t index);
     
     /* CVectorGetElementptr -- get a pointer to an element from a CVector */
     
-    int CVectorGetElementptr(CVectorHandle vectorhandle, void FAR ** elementptr, size_t index);
+    int CVectorGetElementptr(const CVectorHandle vectorhandle, void FAR ** elementptr, const size_t index);
     
     /* CVectorGetFlags - function to return the CVector flags */
     
-    int CVectorGetFlags(CVectorHandle vectorhandle, int FAR * flags);
+    int CVectorGetFlags(const CVectorHandle vectorhandle, unsigned int FAR * flags);
     
     /* CVectorGetSize - function to return the CVector size */
     
-    int CVectorGetSize(CVectorHandle vectorhandle, size_t FAR * size);
+    int CVectorGetSize(const CVectorHandle vectorhandle, size_t FAR * size);
         
     /* CVectorRemoveElement -- remove an element from a generic vector */
     
-    int CVectorRemoveElement(CVectorHandle vectorhandle, size_t index);
+    int CVectorRemoveElement(const CVectorHandle vectorhandle, const size_t index);
 
     /* CVectorSetCapacity - function to set the CVector capacity */
     
-    int CVectorSetCapacity(CVectorHandle vectorhandle, size_t capacity);       
+    int CVectorSetCapacity(const CVectorHandle vectorhandle, const size_t capacity);       
         
     /* CVectorSetElement -- set a copy of an element into a CVector */
     
-    int CVectorSetElement(CVectorHandle vectorhandle, void FAR * element, size_t index);
+    int CVectorSetElement(const CVectorHandle vectorhandle, const void FAR * element, const size_t index);
 
     /* CVectorSetFags - function to set the CVector flags */
     
-    int CVectorSetFlags(CVectorHandle vectorhandle, int flags);
+    int CVectorSetFlags(const CVectorHandle vectorhandle, const unsigned int flags);
     
     /* CVectorSetSize - function to set the CVector size */
     
-    int CVectorSetSize(CVectorHandle vectorhandle, size_t size);
+    int CVectorSetSize(const CVectorHandle vectorhandle, const size_t size);
 
     /* CVectorSize -- macro to return the CVector size */
     

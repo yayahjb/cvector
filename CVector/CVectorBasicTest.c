@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     size_t index;
     double element;
     double * elementptr;
-    int flags;
+    unsigned int flags;
     size_t size, capacity;
     
     fprintf(stdout," Test 0: Create vector and load it with 1000000 elements.\n");
