@@ -39,9 +39,11 @@ extern "C" {
     
 #endif
     
-    
+#ifdef USE_LOCAL_HEADERS
 #include "CVector.h"
-    
+#else
+#include <CVector.h>
+#endif
 
 /* CVectorCreate -- create a generic vector */
 

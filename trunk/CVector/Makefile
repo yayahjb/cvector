@@ -45,12 +45,25 @@ CC	= gcc
 CFLAGS  = -g -O2  -Wall -ansi -pedantic
 
 #
+# libtool path if system default is not suitable
+#
+#LIBTOOL = $(HOME)/bin/libtool
+ifndef LIBTOOL
+  LIBTOOL = libtool
+endif
+
+#
+# If local headers must be quoted uncomment the next line
+#
+#USE_LOCAL_HEADERS = 1
+
+
+#
 # Directories
 #
 ROOT     = .
 LIB      = $(ROOT)/lib
 BIN      = $(ROOT)/bin
-LIBTOOL  = $(ROOT)/libtool
 SRC      = $(ROOT)
 INC      = $(ROOT)
 EXAMPLES = $(ROOT)
@@ -61,8 +74,22 @@ INSTALLDIR  = $(HOME)
 #
 # Include directories
 #
+ifdef USE_LOCAL_HEADERS
+INCLUDES = -DUSE_LOCAL_HEADERS
+else
 INCLUDES = -I$(INC)
+endif
 
+COMPILE_COMMAND        =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -rpath $(INSTALLDIR)/lib
+BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -dynamic -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+BUILD_COMMAND_STATIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static -I $(INSTALLDIR)/include -L$(INSTALLDIR)/lib
+INSTALL_COMMAND        =  $(LIBTOOL) --mode=install cp
+INSTALL_FINISH_COMMAND =  $(LIBTOOL) --mode=finish
+
+OBJ_EXT                =  lo
+LIB_EXT                =  la
 
 ######################################################################
 #  You should not need to make modifications below this line         #
@@ -71,7 +98,7 @@ INCLUDES = -I$(INC)
 #
 # Suffixes of files to be used or built
 #
-.SUFFIXES:	.c .o .lo .la
+.SUFFIXES:	.c .$(OBJ_EXT) .$(LIB_EXT)
 
 #
 # Common dependencies
@@ -97,20 +124,32 @@ default:
 	@echo ' PLEASE READ README_CVector.txt and lgpl.txt'
 	@echo ' '
 	@echo ' Before making the CVector library and example programs, check'
-	@echo ' that the C compiler name and flags are correct:'
+	@echo ' that the chosen settings are corr'
 	@echo ' '
-	@echo ' The current values are:'
+	@echo ' The current compile command is:'
 	@echo ' '
-	@echo '   $(CC) $(CFLAGS)'
+	@echo '   $(COMPILE_COMMAND)'
 	@echo ' '
-	@echo ' Before installing the CBF library and example programs, check'
-	@echo ' that the install directory is correct:'
+	@echo ' The current library link command is:'
 	@echo ' '
-	@echo ' The current value :'
+	@echo '   $(LIBRARY_LINK_COMMAND)'
+	@echo ' '
+	@echo ' The current library local, dynamic and static build commands are:'
+	@echo ' '
+	@echo '   $(BUILD_COMMAND_LOCAL)'
+	@echo '   $(BUILD_COMMAND_DYNAMIC)'
+	@echo '   $(BUILD_COMMAND_STATIC)'
+	@echo ' '
+	@echo ' Before installing the CVector library and example programs, check'
+	@echo ' that the install directory and install commands are correct:'
+	@echo ' '
+	@echo ' The current values are :'
 	@echo ' '
 	@echo '   $(INSTALLDIR) '	
+	@echo '   $(INSTALL_COMMAND) '	
+	@echo '   $(INSTALL_FINISH) '	
 	@echo ' '
-	@echo ' To compile the CBF library and example programs type:'
+	@echo ' To compile the CVector library and example programs type:'
 	@echo ' '
 	@echo '   make clean'
 	@echo '   make all'
@@ -134,19 +173,30 @@ default:
 # Compile the library and examples
 #
 all:	$(LIB) $(BIN) $(SOURCE) $(HEADERS) \
-		$(BIN)/libtool \
-		$(LIB)/libCVector.la \
+		$(LIB)/libCVector.$(LIB_EXT) \
 		$(BIN)/CVectorBasicTest
 		
 install:  all $(INSTALLDIR) $(INSTALLDIR)/lib $(INSTALLDIR)/include \
-          $(INC) $(LIB)/libCVector.la  $(INC)/CVector.h
-		  -$(BIN)/libtool cp $(INSTALLDIR)/lib/libCVector.la $(INSTALLDIR)/lib/libCVector_old.la
-		  $(BIN)/libtool --mode=finish $(LIB)/libCVector.la
-		  $(BIN)/libtool cp $(LIB)/libCVector.la $(INSTALLDIR)/lib/libCVector.la
-		  $(BIN)/libtool --mode=finish $(INSTALLDIR)/lib/libCVector.la
+          $(INC) $(LIB)/libCVector.$(LIB_EXT)  $(INC)/CVector.h
+		  $(INSTALL_COMMAND) $(LIB)/libCVector.$(LIB_EXT) $(INSTALLDIR)/lib/libCVector.$(LIB_EXT)
+		  $(INSTALL_FINISH_COMMAND) $(INSTALLDIR)/lib/libCVector.$(LIB_EXT)
 		  -cp $(INSTALLDIR)/include/CVector.h $(INSTALLDIR)/include/CVector_old.h
 		  cp $(INC)/CVector.h $(INSTALLDIR)/include/CVector.h
 		  chmod 644 $(INSTALLDIR)/include/CVector.h
+		  echo "Testing final install dynamic"
+		  $(BUILD_COMMAND_DYNAMIC)  $(EXAMPLES)/CVectorBasicTest.c \
+		  -lCVector -o $(BIN)/CvectorBasicTest_dynamic
+		  $(BIN)/CVectorBasicTest_dynamic > $(TESTDATA)/CVectorBasicTest_dynamic.lst
+		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
+		    $(TESTDATA)/CVectorBasicTest_dynamic.lst
+		  echo "Testing final install static"
+		  $(BUILD_COMMAND_STATIC) $(EXAMPLES)/CVectorBasicTest.c \
+		   -lCVector -o $(BIN)/CvectorBasicTest_static
+		  $(BIN)/CVectorBasicTest_static > $(TESTDATA)/CVectorBasicTest_static.lst
+		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
+		    $(TESTDATA)/CVectorBasicTest_static.lst
+			
+		  
 		  
 #
 # Directories
@@ -170,23 +220,18 @@ $(LIB):
 $(BIN):
 	mkdir $(BIN)
 
-$(BIN)/libtool:
-		(CC=$(CC); cd $(LIBTOOL); ./build_libtool.sh; mv ./libtool ../$(BIN)/libtool)
-
 #
 # CVector library
 #
-$(LIB)/libCVector.la: $(SOURCE) $(HEADERS) $(COMMONDEP) $(BIN)/libtool
-	$(BIN)/libtool --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c $(SOURCE)
-	$(BIN)/libtool --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -rpath $(INSTALLDIR)/lib -o $(LIB)/libCVector.la *.lo 
-
+$(LIB)/libCVector.$(LIB_EXT): $(SOURCE) $(HEADERS) $(COMMONDEP)
+	$(COMPILE_COMMAND) -c $(SOURCE)
+	$(LIBRARY_LINK_COMMAND) -o $(LIB)/libCVector.$(LIB_EXT) *.$(OBJ_EXT) 
 
 #
 # CVectorBasicTest example program
 #
-$(BIN)/CVectorBasicTest: $(LIB)/libCVector.la $(EXAMPLES)/CVectorBasicTest.c 
-		  $(BIN)/libtool $(CC) $(CFLAGS) $(INCLUDES) \
-		      $(EXAMPLES)/CVectorBasicTest.c $(LIB)/libCVector.la \
+$(BIN)/CVectorBasicTest: $(LIB)/libCVector.$(LIB_EXT) $(EXAMPLES)/CVectorBasicTest.c 
+	$(BUILD_COMMAND_LOCAL) $(EXAMPLES)/CVectorBasicTest.c $(LIB)/libCVector.$(LIB_EXT) \
 		      -o $@
 
 #
@@ -212,7 +257,7 @@ empty:
 clean:
 	@-rm -f core 
 	@-rm -f *.o
-	@-rm -f *.lo
+	@-rm -f *.$(OBJ_EXT)
 
 #
 # Restore to distribution state
