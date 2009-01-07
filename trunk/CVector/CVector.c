@@ -45,13 +45,15 @@ extern "C" {
 
 /* CVectorCreate -- create a generic vector */
 
-int CVectorCreate(CVectorHandle FAR * vectorhandle, size_t elementsize, size_t capacity) {
-    
-    if (!vectorhandle) return CVECTOR_BAD_ARGUMENT;
+    int CVectorCreate(CVectorHandle FAR * vectorhandle, const size_t elementsize, const size_t capacity) {
+        
+        size_t cap = capacity;
+        
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
     
     *vectorhandle = (CVectorHandle)MALLOC(sizeof(CVector));
     
-    if (!(*vectorhandle)) {
+        if ((*vectorhandle==NULL)) {
         return CVECTOR_MALLOC_FAILED;
     }
     
@@ -59,10 +61,10 @@ int CVectorCreate(CVectorHandle FAR * vectorhandle, size_t elementsize, size_t c
     (*vectorhandle)->flags = 0;
     (*vectorhandle)->capacity = 0;
     (*vectorhandle)->elementsize = elementsize;
-    if (!capacity) capacity = 10;
-    (*vectorhandle)->array = (void FAR *)MALLOC(capacity*elementsize);
+        if (!cap) { cap = 10; }
+        (*vectorhandle)->array = (void FAR *)MALLOC(cap*elementsize);
     if ((*vectorhandle)->array) {
-        (*vectorhandle)->capacity = capacity;
+            (*vectorhandle)->capacity = cap;
         return 0;
     }
     FREE(*vectorhandle);
@@ -75,21 +77,21 @@ int CVectorCreate(CVectorHandle FAR * vectorhandle, size_t elementsize, size_t c
                          equivalent to vector::push_back  */
     
 
-int CVectorAddElement(CVectorHandle vectorhandle, void FAR * element) {
+    int CVectorAddElement(const CVectorHandle vectorhandle, const void FAR * element) {
     
     size_t newcap;
     
     int errorcode;
     
-    if (!(vectorhandle)) return CVECTOR_BAD_ARGUMENT;
-    
-    if ( (vectorhandle->flags&CVECTOR_FLAGS_NO_RESIZE) ) return CVECTOR_NO_RESIZE;
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        
+        if ( (vectorhandle->flags&CVECTOR_FLAGS_NO_RESIZE) ) { return CVECTOR_NO_RESIZE; }
     
     if (vectorhandle->size >= vectorhandle->capacity) {
         
         newcap = vectorhandle->capacity*2;
         
-        if (newcap < 1) newcap = 1;
+            if (newcap < 1) { newcap = 1; }
         
         errorcode = CVectorSetCapacity (vectorhandle, newcap);
         
@@ -97,17 +99,17 @@ int CVectorAddElement(CVectorHandle vectorhandle, void FAR * element) {
             
             newcap = vectorhandle->capacity+(size_t)(vectorhandle->capacity>>2);
             
-            if (newcap < 1) newcap = 1;
+                if (newcap < 1) { newcap = 1; }
         
             errorcode = CVectorSetCapacity (vectorhandle, newcap);
             
-            if (errorcode != 0) return errorcode;
+                if (errorcode != 0) { return errorcode; }
         }
         
     }
     
-    MEMMOVE(((char *)(vectorhandle->array))+vectorhandle->size*vectorhandle->elementsize,
-            (char *)element, vectorhandle->elementsize);
+        MEMMOVE(((char FAR *)(vectorhandle->array))+vectorhandle->size*vectorhandle->elementsize,
+                (const char FAR *)element, vectorhandle->elementsize);
     vectorhandle->size ++;
     return 0;
     
@@ -115,9 +117,9 @@ int CVectorAddElement(CVectorHandle vectorhandle, void FAR * element) {
 
 /* CVectorGetElement -- get a copy of an element from a generic vector */
 
-int CVectorGetElement(CVectorHandle vectorhandle, void FAR * element, size_t index) {
-    
-    if (!(vectorhandle)) return CVECTOR_BAD_ARGUMENT;
+    int CVectorGetElement(const CVectorHandle vectorhandle, void FAR * element, const size_t index) {
+        
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
     
     if (index >= 0 && index < vectorhandle->size) {
         
@@ -136,9 +138,9 @@ int CVectorGetElement(CVectorHandle vectorhandle, void FAR * element, size_t ind
 
 /* CVectorGetElementptr -- get a pointer to an element from a generic vector */
 
-int CVectorGetElementptr(CVectorHandle vectorhandle, void FAR ** elementptr, size_t index) {
-    
-    if (!(vectorhandle)) return CVECTOR_BAD_ARGUMENT;
+    int CVectorGetElementptr(const CVectorHandle vectorhandle, void FAR ** elementptr, const size_t index) {
+        
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
     
     if (index >= 0 && index < vectorhandle->size) {
         
@@ -158,13 +160,13 @@ int CVectorGetElementptr(CVectorHandle vectorhandle, void FAR ** elementptr, siz
 
 /* CVectorSetElement -- set a copy of an element into a generic vector */
 
-int CVectorSetElement(CVectorHandle vectorhandle, void FAR * element, size_t index) {
+    int CVectorSetElement(const CVectorHandle vectorhandle, const void FAR * element, const size_t index) {
     
     size_t newcap;
     
     int errorcode;
     
-    if (!(vectorhandle) ) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL) ) { return CVECTOR_BAD_ARGUMENT; }
     
     if (index >= vectorhandle->capacity) {
         
@@ -175,11 +177,11 @@ int CVectorSetElement(CVectorHandle vectorhandle, void FAR * element, size_t ind
         if (errorcode != 0 ) {
             
             newcap = index*1.2;
-            if (newcap < index+128) newcap = index+128;
+                if (newcap < index+128) { newcap = index+128; }
             
             errorcode = CVectorSetCapacity(vectorhandle, newcap);
             
-            if (errorcode != 0) return errorcode;
+                if (errorcode != 0) { return errorcode; }
             
         }
     }
@@ -190,7 +192,7 @@ int CVectorSetElement(CVectorHandle vectorhandle, void FAR * element, size_t ind
         MEMMOVE(((char *)(vectorhandle->array))+index*vectorhandle->elementsize,(char *)element,
                 vectorhandle->elementsize);
         
-        if (index >= vectorhandle->size) vectorhandle->size = index+1;
+            if (index >= vectorhandle->size) { vectorhandle->size = index+1; }
         return 0;
         
     } else {
@@ -211,13 +213,13 @@ int CVectorSetElement(CVectorHandle vectorhandle, void FAR * element, size_t ind
    to index*(vectorhandle->elementsize)
 */
     
-int CVectorRemoveElement(CVectorHandle vectorhandle, size_t index) {
+    int CVectorRemoveElement(const CVectorHandle vectorhandle, const size_t index) {
         
-    if (!(vectorhandle)) return CVECTOR_BAD_ARGUMENT;
-    
-    if ((vectorhandle->flags&CVECTOR_FLAGS_NO_RELOCATION)) return CVECTOR_NO_RELOCATION;
-    
-    if (index >= vectorhandle->size || index < 0 ) return CVECTOR_NOT_FOUND;
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        
+        if ((vectorhandle->flags&CVECTOR_FLAGS_NO_RELOCATION)) { return CVECTOR_NO_RELOCATION; }
+        
+        if (index >= vectorhandle->size || index < 0 ) { return CVECTOR_NOT_FOUND; }
         
     if (index == vectorhandle->size-1) {
         vectorhandle->size--;
@@ -234,11 +236,11 @@ int CVectorRemoveElement(CVectorHandle vectorhandle, size_t index) {
 
 /* CVectorClear -- clear a generic vector */
     
-int CVectorClear(CVectorHandle vectorhandle) {
-    
-    if (!(vectorhandle)) return CVECTOR_BAD_ARGUMENT;
-    
-    if (vectorhandle->flags & CVECTOR_FLAGS_NO_RESIZE) return CVECTOR_NO_RESIZE;
+    int CVectorClear(const CVectorHandle vectorhandle) {
+        
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        
+        if (vectorhandle->flags & CVECTOR_FLAGS_NO_RESIZE) { return CVECTOR_NO_RESIZE; }
     
     vectorhandle->size = 0;
     
@@ -250,13 +252,13 @@ int CVectorClear(CVectorHandle vectorhandle) {
 
 int CVectorFree(CVectorHandle FAR * vectorhandle) {
     
-    if (!(vectorhandle)) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
 
     if (*vectorhandle) {
         
-        if ((*vectorhandle)->flags & CVECTOR_FLAGS_NO_RESIZE) return CVECTOR_NO_RESIZE;
-        
-        if ((*vectorhandle)->flags & CVECTOR_FLAGS_NO_RELOCATION) return CVECTOR_NO_RELOCATION;
+            if ((*vectorhandle)->flags & CVECTOR_FLAGS_NO_RESIZE) { return CVECTOR_NO_RESIZE; }
+            
+            if ((*vectorhandle)->flags & CVECTOR_FLAGS_NO_RELOCATION) { return CVECTOR_NO_RELOCATION; }
         
         if ((*vectorhandle)->array) {
             
@@ -276,9 +278,9 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
     
 /* CVectorGetCapacity - function to return the CVector capacity */
     
-    int CVectorGetCapacity(CVectorHandle vectorhandle, size_t FAR * capacity) {
+    int CVectorGetCapacity(const CVectorHandle vectorhandle, size_t FAR * capacity) {
         
-        if (!(vectorhandle)||!(capacity)) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL)||!(capacity)) { return CVECTOR_BAD_ARGUMENT; }
         
         *capacity = vectorhandle->capacity;
         
@@ -287,9 +289,9 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
 
 /* CVectorGetSize - function to return the CVector size */
     
-    int CVectorGetSize(CVectorHandle vectorhandle, size_t FAR * size) {
+    int CVectorGetSize(const CVectorHandle vectorhandle, size_t FAR * size) {
         
-        if (!(vectorhandle)||!(size)) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL)||!(size)) { return CVECTOR_BAD_ARGUMENT; }
         
         *size = vectorhandle->size;
         
@@ -298,9 +300,9 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
 
 /* CVectorGetFlags - function to return the CVector flags */
     
-    int CVectorGetFlags(CVectorHandle vectorhandle, int FAR * flags) {
+    int CVectorGetFlags(const CVectorHandle vectorhandle, unsigned int FAR * flags) {
         
-        if (!(vectorhandle)||!(flags)) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL)||!(flags)) { return CVECTOR_BAD_ARGUMENT; }
         
         *flags = vectorhandle->flags;
         
@@ -309,23 +311,24 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
 
 /* CVectorSetCapacity - function to set the CVector capacity */
     
-    int CVectorSetCapacity(CVectorHandle vectorhandle, size_t capacity) {
+    int CVectorSetCapacity(const CVectorHandle vectorhandle, const size_t capacity) {
 
         void FAR * temparray;
         
-        if (!(vectorhandle) || capacity < vectorhandle->size) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL) || capacity < vectorhandle->size) { return CVECTOR_BAD_ARGUMENT; }
         
-        if (capacity == vectorhandle->capacity) return 0;
+        if (capacity == vectorhandle->capacity) { return 0; }
         
-        if (vectorhandle->flags&CVECTOR_FLAGS_NO_RELOCATION) return CVECTOR_NO_RELOCATION;
+        if (vectorhandle->flags&CVECTOR_FLAGS_NO_RELOCATION) { return CVECTOR_NO_RELOCATION; }
         
         if (capacity) {
         
         temparray = MALLOC(capacity*vectorhandle->elementsize);
-        if (!temparray)   return CVECTOR_MALLOC_FAILED;
-        
-        if (vectorhandle->size)    
+            if (!temparray)   { return CVECTOR_MALLOC_FAILED; }
+            
+            if (vectorhandle->size) {   
             MEMMOVE((char *)temparray, (char *)vectorhandle->array, vectorhandle->size*vectorhandle->elementsize);
+            }
         FREE(vectorhandle->array);
             
         } else {
@@ -340,23 +343,23 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
 
 /* CVectorSetSize - function to set the CVector size */
     
-    int CVectorSetSize(CVectorHandle vectorhandle, size_t size) {
+    int CVectorSetSize(const CVectorHandle vectorhandle, const size_t size) {
 
         int errorcode;
         
-        if (!(vectorhandle) ) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL) ) { return CVECTOR_BAD_ARGUMENT; }
         
-        if (size == vectorhandle->size) return 0;
+        if (size == vectorhandle->size) { return 0; }
         
-        if ((vectorhandle->flags & CVECTOR_FLAGS_NO_RESIZE)) return CVECTOR_NO_RESIZE;
+        if ((vectorhandle->flags & CVECTOR_FLAGS_NO_RESIZE)) { return CVECTOR_NO_RESIZE; }
         
         if ( size > vectorhandle->capacity ) {
         
-            if ((vectorhandle->flags & CVECTOR_FLAGS_NO_RELOCATION) ) return CVECTOR_NO_RELOCATION;
+            if ((vectorhandle->flags & CVECTOR_FLAGS_NO_RELOCATION) ) { return CVECTOR_NO_RELOCATION; }
         
             errorcode = CVectorSetCapacity(vectorhandle,size);
         
-            if (errorcode != 0) return errorcode;
+            if (errorcode != 0) { return errorcode; }
         
         }
         
@@ -379,9 +382,9 @@ int CVectorFree(CVectorHandle FAR * vectorhandle) {
     
     /* CVectorSetFags - function to set the CVector flags */
     
-    int CVectorSetFlags(CVectorHandle vectorhandle, int flags) {
+    int CVectorSetFlags(const CVectorHandle vectorhandle, const unsigned int flags) {
         
-        if (!(vectorhandle) ) return CVECTOR_BAD_ARGUMENT;
+        if ((vectorhandle==NULL) ) { return CVECTOR_BAD_ARGUMENT; }
         
         vectorhandle->flags = flags;
         

@@ -34,17 +34,9 @@
 #**********************************************************************/
 
 # Version string
-VERSION = 0.1.0
+VERSION = 1:0:1
+RELEASE = 1.0
 
-#
-# Program to use to create archives
-#
-AR	= /usr/bin/ar
-
-#
-# Program to use to add an index to an archive
-#
-RANLIB  = /usr/bin/ranlib
 
 #
 # Compiler and compilation flags
@@ -58,8 +50,9 @@ CFLAGS  = -g -O2  -Wall -ansi -pedantic
 ROOT     = .
 LIB      = $(ROOT)/lib
 BIN      = $(ROOT)/bin
+LIBTOOL  = $(ROOT)/libtool
 SRC      = $(ROOT)
-INCLUDE  = $(ROOT)
+INC      = $(ROOT)
 EXAMPLES = $(ROOT)
 TESTDATA = $(ROOT)
 #INSTALLDIR = /usr/local
@@ -68,7 +61,7 @@ INSTALLDIR  = $(HOME)
 #
 # Include directories
 #
-INCLUDES = -I$(INCLUDE)
+INCLUDES = -I$(INC)
 
 
 ######################################################################
@@ -78,7 +71,7 @@ INCLUDES = -I$(INCLUDE)
 #
 # Suffixes of files to be used or built
 #
-.SUFFIXES:	.c .o
+.SUFFIXES:	.c .o .lo .la
 
 #
 # Common dependencies
@@ -93,7 +86,7 @@ SOURCE   =  $(SRC)/CVector.c
 #
 # Header files
 #
-HEADERS   =  $(INCLUDE)/CVector.h
+HEADERS   =  $(INC)/CVector.h
 
 # Default: instructions
 #
@@ -141,16 +134,18 @@ default:
 # Compile the library and examples
 #
 all:	$(LIB) $(BIN) $(SOURCE) $(HEADERS) \
-		$(LIB)/libCVector.a \
+		$(BIN)/libtool \
+		$(LIB)/libCVector.la \
 		$(BIN)/CVectorBasicTest
 		
 install:  all $(INSTALLDIR) $(INSTALLDIR)/lib $(INSTALLDIR)/include \
-          $(INCLUDE) $(HEADERS) $(LIB)/libCVector.a
-		  -cp $(INSTALLDIR)/lib/libCVector.a $(INSTALLDIR)/lib/libCVector_old.a
-		  cp $(LIB)/libCvector.a $(INSTALLDIR)/lib/libCVector.a
+          $(INC) $(LIB)/libCVector.la  $(INC)/CVector.h
+		  -$(BIN)/libtool cp $(INSTALLDIR)/lib/libCVector.la $(INSTALLDIR)/lib/libCVector_old.la
+		  $(BIN)/libtool --mode=finish $(LIB)/libCVector.la
+		  $(BIN)/libtool cp $(LIB)/libCVector.la $(INSTALLDIR)/lib/libCVector.la
+		  $(BIN)/libtool --mode=finish $(INSTALLDIR)/lib/libCVector.la
 		  -cp $(INSTALLDIR)/include/CVector.h $(INSTALLDIR)/include/CVector_old.h
-		  cp $(INCLUDE)/Cvector.h $(INSTALLDIR)/include/CVector.h
-		  chmod 644 $(INSTALLDIR)/lib/libCVector.a
+		  cp $(INC)/CVector.h $(INSTALLDIR)/include/CVector.h
 		  chmod 644 $(INSTALLDIR)/include/CVector.h
 		  
 #
@@ -175,25 +170,24 @@ $(LIB):
 $(BIN):
 	mkdir $(BIN)
 
+$(BIN)/libtool:
+		(CC=$(CC); cd $(LIBTOOL); ./build_libtool.sh; mv ./libtool ../$(BIN)/libtool)
 
 #
 # CVector library
 #
-$(LIB)/libCVector.a: $(SOURCE) $(HEADERS) $(COMMONDEP)
-	$(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c $(SOURCE)
-	$(AR) cr $@ *.o
-	rm *.o
-ifneq ($(RANLIB),)
-	$(RANLIB) $@
-endif
+$(LIB)/libCVector.la: $(SOURCE) $(HEADERS) $(COMMONDEP) $(BIN)/libtool
+	$(BIN)/libtool --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c $(SOURCE)
+	$(BIN)/libtool --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -rpath $(INSTALLDIR)/lib -o $(LIB)/libCVector.la *.lo 
+
 
 #
 # CVectorBasicTest example program
 #
-$(BIN)/CVectorBasicTest: $(LIB)/libCVector.a $(EXAMPLES)/CVectorBasicTest.c 
-		  $(CC) $(CFLAGS) $(INCLUDES) \
-		      $(EXAMPLES)/CVectorBasicTest.c -L$(LIB) \
-		  -lCVector -o $@
+$(BIN)/CVectorBasicTest: $(LIB)/libCVector.la $(EXAMPLES)/CVectorBasicTest.c 
+		  $(BIN)/libtool $(CC) $(CFLAGS) $(INCLUDES) \
+		      $(EXAMPLES)/CVectorBasicTest.c $(LIB)/libCVector.la \
+		      -o $@
 
 #
 # Tests
@@ -208,8 +202,8 @@ tests:		$(LIB) $(BIN) $(BIN)/CVectorBasicTest \
 # Remove all non-source files
 #
 empty:
-		  @-rm -f $(LIB)/libCVector.a
-		  @-rm -f $(BIN)/CVectorBasicTest
+		  @-rm -rf $(LIB)
+		  @-rm -rf $(BIN)
 		  @-rm -f $(TESTDATA)/CVectorBasicTest.lst
 		  
 #
@@ -218,6 +212,7 @@ empty:
 clean:
 	@-rm -f core 
 	@-rm -f *.o
+	@-rm -f *.lo
 
 #
 # Restore to distribution state
