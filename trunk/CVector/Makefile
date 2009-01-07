@@ -185,13 +185,13 @@ install:  all $(INSTALLDIR) $(INSTALLDIR)/lib $(INSTALLDIR)/include \
 		  chmod 644 $(INSTALLDIR)/include/CVector.h
 		  echo "Testing final install dynamic"
 		  $(BUILD_COMMAND_DYNAMIC)  $(EXAMPLES)/CVectorBasicTest.c \
-		  -lCVector -o $(BIN)/CvectorBasicTest_dynamic
+		  -lCVector -o $(BIN)/CVectorBasicTest_dynamic
 		  $(BIN)/CVectorBasicTest_dynamic > $(TESTDATA)/CVectorBasicTest_dynamic.lst
 		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
 		    $(TESTDATA)/CVectorBasicTest_dynamic.lst
 		  echo "Testing final install static"
 		  $(BUILD_COMMAND_STATIC) $(EXAMPLES)/CVectorBasicTest.c \
-		   -lCVector -o $(BIN)/CvectorBasicTest_static
+		   -lCVector -o $(BIN)/CVectorBasicTest_static
 		  $(BIN)/CVectorBasicTest_static > $(TESTDATA)/CVectorBasicTest_static.lst
 		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
 		    $(TESTDATA)/CVectorBasicTest_static.lst
