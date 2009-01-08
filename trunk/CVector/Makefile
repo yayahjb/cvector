@@ -124,7 +124,7 @@ default:
 	@echo ' PLEASE READ README_CVector.txt and lgpl.txt'
 	@echo ' '
 	@echo ' Before making the CVector library and example programs, check'
-	@echo ' that the chosen settings are corr'
+	@echo ' that the chosen settings are correct'
 	@echo ' '
 	@echo ' The current compile command is:'
 	@echo ' '
