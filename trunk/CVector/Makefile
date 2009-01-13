@@ -193,13 +193,13 @@ install:  all $(INSTALL_PREFIX) $(INSTALL_PREFIX)/lib $(INSTALL_PREFIX)/include 
 		  chmod 644 $(INSTALL_PREFIX)/include/CVector.h
 		  echo "Testing final install dynamic"
 		  $(BUILD_COMMAND_DYNAMIC)  $(EXAMPLES)/CVectorBasicTest.c \
-		  -L$(INSTALLPREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_dynamic
+		  -L$(INSTALL_PREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_dynamic
 		  $(BIN)/CVectorBasicTest_dynamic > $(TESTDATA)/CVectorBasicTest_dynamic.lst
 		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
 		    $(TESTDATA)/CVectorBasicTest_dynamic.lst
 		  echo "Testing final install static"
 		  $(BUILD_COMMAND_STATIC) $(EXAMPLES)/CVectorBasicTest.c \
-		  -L$(INSTALLPREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_static
+		  -L$(INSTALL_PREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_static
 		  $(BIN)/CVectorBasicTest_static > $(TESTDATA)/CVectorBasicTest_static.lst
 		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
 		    $(TESTDATA)/CVectorBasicTest_static.lst
