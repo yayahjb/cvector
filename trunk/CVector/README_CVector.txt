@@ -1,7 +1,7 @@
                     CVector -- ANSI C API for Dynamic Arrays
 
-                                  Release 1.0
-                                 8 January 2009
+                                 Release 1.0.1
+                                13 January 2009
                       (c) 2008, 2009 Herbert J. Bernstein
                       yaya at bernstein-plus-sons dot com
                You may distribute the CVector API under the LGPL
@@ -9,21 +9,25 @@
    CVector is an ANSI C implementation of dynamic arrays to provide a crude
    approximation to the C++ vector class.
 
+   This release is a minor revision of release 1.0.0 of 8 January 2009 to
+   update the Makefile for builds under MINGW. There are no changes to the
+   code. The internal copy of libtool has been removed.
+
     Installation
 
    The CVector package is available at www.sourceforge.net/projects/cvector.
    A source tarball is available at
-   downloads.sourceforge.net/cvector/CVector-1.0.0.tar.gz. Later tarballs may
+   downloads.sourceforge.net/cvector/CVector-1.0.1.tar.gz. Later tarballs may
    be available.
 
    When the source tarball is dowloaded and unpacked, you should have a
-   directory CVector-1.0.0. To see the current settings for a build execute
+   directory CVector-1.0.1. To see the current settings for a build execute
 
    make
 
    which should give the following information:
 
-  PLEASE READ README_CVector.txt and lgpl.txt
+ PLEASE READ README_CVector.txt and lgpl.txt
  
   Before making the CVector library and example programs, check
   that the chosen settings are corr
@@ -34,23 +38,23 @@
  
   The current library link command is:
  
-    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0 \
-      -rpath /home/faculty/bernsteh/lib
+    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.1 \
+      -rpath /usr/local/lib
  
   The current library local, dynamic and static build commands are:
  
     libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -I.
-    libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -dynamic \
-      -I /home/faculty/bernsteh/include -L/home/faculty/bernsteh/lib
+    libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -shared \
+      -I /usr/local/include
     libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -static \
-      -I /home/faculty/bernsteh/include -L/home/faculty/bernsteh/lib
+      -I /usr/local/include
  
   Before installing the CVector library and example programs, check
   that the install directory and install commands are correct:
  
   The current values are :
  
-    your home directory
+    /usr/local
     libtool --mode=install cp
     
  
@@ -75,9 +79,10 @@
    If these settings need to be changed, edit Makefile. On some systems, e.g.
    Mac OS X, the default libtool is not appropriate. In that case you should
    install a recent version of libtool. The CVector kit has been tested with
-   libtool versions 1.3.5 and 1.5.4. If the system libtool is not to be used,
-   define the variable LIBTOOL to be the path to the libtaol executable, e.g.
-   in bash
+   libtool versions 1.3.5, 1.5.4 and 2.2.6. If the system libtool is not to
+   be used, define the variable LIBTOOL to be the path to the libtool
+   executable, e.g. in bash. On MINGW, use of gcc 4 and libtool 2.2.6 are
+   highly recommended.
 
    export LIBTOOL=$HOME/bin/libtool
 
