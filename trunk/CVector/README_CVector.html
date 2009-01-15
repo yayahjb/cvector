@@ -113,42 +113,42 @@ define the variable USE_LOCAL_HEADERS
 <P>
 <b>#include &lt;CVector.h&gt;</b>
 <P>    
-    <b>int</i> <br /><b>CVectorCreate</b>(<b>CVectorHandle</b> <i>*</i> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>elementsize</i>, <b>const</b> <b>size_t</b> <i>capacity</i>);
+    <b>int</b> <br /><b>CVectorCreate</b>(<b>CVectorHandle</b> <i>*</i> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>elementsize</i>, <b>const</b> <b>size_t</b> <i>capacity</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorAddElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b>  <b>void</b> <i>*</i> <i>element</i>);
+    <b>int</b> <br /><b>CVectorAddElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b>  <b>void</b> <i>*</i> <i>element</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorGetElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i> <i>element</i>, <b>const</b> <b>size_t</b> <i>index</i>);
+    <b>int</b> <br /><b>CVectorGetElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i> <i>element</i>, <b>const</b> <b>size_t</b> <i>index</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorGetElementptr</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i>* <i>elementptr</i>, <b>const</b> <b>size_t</b> <i>index</i>);
+    <b>int</b> <br /><b>CVectorGetElementptr</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i>* <i>elementptr</i>, <b>const</b> <b>size_t</b> <i>index</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorSetElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i> <i>element</i>, <b>const</b> <b>size_t</b> <i>index</i>);
+    <b>int</b> <br /><b>CVectorSetElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i> <i>element</i>, <b>const</b> <b>size_t</b> <i>index</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorRemoveElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>index</i>);
+    <b>int</b> <br /><b>CVectorRemoveElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>index</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorClear</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>);
+    <b>int</b> <br /><b>CVectorClear</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>);
 <p>    
-    <b>int</i> <br /><b>CVectorFree</b>(<b>CVectorHandle</b> <i>*</i> <i>vectorhandle</i>);
+    <b>int</b> <br /><b>CVectorFree</b>(<b>CVectorHandle</b> <i>*</i> <i>vectorhandle</i>);
 <p>    
     <b>size_t</b> <br /><b>CVectorCapacity</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>);    
 <p>    
-    <b>int</i> <br /><b>CVectorGetCapacity</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>size_t</b> <i>*</i> <i>capacity</i>);
+    <b>int</b> <br /><b>CVectorGetCapacity</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>size_t</b> <i>*</i> <i>capacity</i>);
 <p>    
     <b>size_t</b>  <br /><b>CVectorSize</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>);
 <p>
     
-    <b>int</i> <br /><b>CVectorGetSize</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>size_t</b> <i>*</i> <i>size</i>);
+    <b>int</b> <br /><b>CVectorGetSize</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>size_t</b> <i>*</i> <i>size</i>);
 <p>
     
-    <b>int</i> <br /><b>CVectorGetFlags</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>int</i> <i>*</i> <i>flags</i>);
+    <b>int</b> <br /><b>CVectorGetFlags</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>int</b> <i>*</i> <i>flags</i>);
 <p>
     
-    <b>int</i> <br /><b>CVectorSetCapacity</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>capacity</i>);       
+    <b>int</b> <br /><b>CVectorSetCapacity</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>capacity</i>);       
 <p>
     
-    <b>int</i> <br /><b>CVectorSetSize</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>size</i>);
+    <b>int</b> <br /><b>CVectorSetSize</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>size</i>);
 <p>
     
-    <b>int</i> <br /><b>CVectorSetFlags</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>unsigned</b> <b>int</i> <i>flags</i>);
+    <b>int</b> <br /><b>CVectorSetFlags</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>unsigned</b> <b>int</b> <i>flags</i>);
 <p>
 <h4>Description</h4>
 <P>
