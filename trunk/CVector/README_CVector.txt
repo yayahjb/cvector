@@ -38,16 +38,13 @@
  
   The current library link command is:
  
-    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.1 \
-      -rpath /usr/local/lib
+    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.1 -rpath /usr/local/lib
  
   The current library local, dynamic and static build commands are:
  
     libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -I.
-    libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -shared \
-      -I /usr/local/include
-    libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -static \
-      -I /usr/local/include
+    libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -shared -I /usr/local/include
+    libtool --mode=link gcc -g -O2  -Wall -ansi -pedantic -static -I /usr/local/include
  
   Before installing the CVector library and example programs, check
   that the install directory and install commands are correct:
@@ -103,6 +100,9 @@
 
    int
    CVectorAddElement(const CVectorHandle vectorhandle, const void * element);
+
+   void *
+   CVectorElementAt(const CVectorHandle vectorhandle, const size_t index);
 
    int
    CVectorGetElement(const CVectorHandle vectorhandle, void * element, const
@@ -162,13 +162,17 @@
    be added at the end of the dynamic array using CVectorAddElement(), or in
    arbitrary order with CVectorSetElement(). Elements may be examined with
    copy semantics using CVectorGetElement() or as pointers directly into the
-   dynamic array using CVectorGetElementptr(). Caution must be used in using
-   pointers because expansion of the dynamic array can force relocation of
-   all data in the dynamic array. Therefore, any use of
+   dynamic array using CVectorGetElementptr(). The function
+   CVectorElementAt() performs the same function as CVectorGetElementptr()
+   for use in complex expressions, but does no error checking. Caution must
+   be used in using pointers because expansion of the dynamic array can force
+   relocation of all data in the dynamic array. Therefore, any use of
    CVectorGetElementptr() sets a flag, CVECTOR_FLAGS_NO_RELOCATION, that
    disables any further array relocation, which will prevent the extension of
    the size array beyond the capacity in effect at the time of the first
-   CVectorGetElementptr() call. The functions CVectorGetFlags() and
+   CVectorGetElementptr() call. Calls to CVectorElementAt() do not set
+   CVECTOR_FLAGS_NO_RELOCATION and returning resulting values to calling
+   routines is dangerous. The functions CVectorGetFlags() and
    CVectorSetFlags() can be used to reset this flag (see Examples below). The
    function CVectorRemoveElement() will remove the element of the indicated
    index, shifting all elements of higher indices down, unless the flag
@@ -195,9 +199,11 @@
    The functions CVectorCapacity() and CVectorSize() are implemented as
    macros and return the CVector capacity and size directly. While they could
    be used as lvalues, such use is not recommended and is not guaranteed to
-   work in future versions of CVector. All other functions return 0 for
-   normal completion, or the sum of one or more of the following non-zero
-   error codes:
+   work in future versions of CVector. The function CVectorElementAt() is
+   implemented as a macro and returns a void * pointer into the data array
+   with no bounds checking. All other functions return 0 for normal
+   completion, or the sum of one or more of the following non-zero error
+   codes:
 
      Error Return          Numeric Value    Meaning                           
      CVECTOR_MALLOC_FAILED    -1            /* A call to allocate memory      
