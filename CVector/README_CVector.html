@@ -117,6 +117,8 @@ define the variable USE_LOCAL_HEADERS
 <p>    
     <b>int</b> <br /><b>CVectorAddElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b>  <b>void</b> <i>*</i> <i>element</i>);
 <p>    
+    <b>void *</b> <br /><b>CVectorElementAt</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>, <b>const</b> <b>size_t</b> <i>index</i>);
+<p>    
     <b>int</b> <br /><b>CVectorGetElement</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i> <i>element</i>, <b>const</b> <b>size_t</b> <i>index</i>);
 <p>    
     <b>int</b> <br /><b>CVectorGetElementptr</b>(<b>const</b> <b>CVectorHandle</b> <i>vectorhandle</i>,  <b>void</b> <i>*</i>* <i>elementptr</i>, <b>const</b> <b>size_t</b> <i>index</i>);
@@ -157,9 +159,12 @@ characters in a block of memory <i>elementsize</i>*<i>capacity</i> characters lo
 each with an <i>index</i> between 0 and <i>size</i>-1.  <b>CVectorCreate</b>() is used to create the dynamic array.  Elements may either be 
 added at the end of the dynamic array using <b>CVectorAddElement</b>(), or in arbitrary order with <b>CVectorSetElement</b>().  Elements may
 be examined with copy semantics using <b>CVectorGetElement</b>() or as pointers directly into the dynamic array using <b>CVectorGetElementptr</b>().
+The function <b>CVectorElementAt</b>() performs the same function as  <b>CVectorGetElementptr</b>() for use in complex expressions, but
+does no error checking.
 Caution must be used in using pointers because expansion of the dynamic array can force relocation of all data in the dynamic array.  Therefore,
 any use of <b>CVectorGetElementptr</b>() sets a flag, CVECTOR_FLAGS_NO_RELOCATION, that disables any further array relocation, which will prevent
-the extension of the <i>size</i> array beyond the <i>capacity</i> in effect at the time of the first <b>CVectorGetElementptr</b>() call.  The functions
+the extension of the <i>size</i> array beyond the <i>capacity</i> in effect at the time of the first <b>CVectorGetElementptr</b>() call.  Calls
+to <b>CVectorElementAt</b>() do not set CVECTOR_FLAGS_NO_RELOCATION and returning resulting values to calling routines is dangerous.  The functions
 <b>CVectorGetFlags</b>() and <b>CVectorSetFlags</b>() can be used to reset this flag (see Examples below).  The function <b>CVectorRemoveElement</b>()
 will remove the element of the indicated <i>index</i>, shifting all elements of higher indices down, unless the flag CVECTOR_FLAGS_NO_RELOCATION is set.
 The capacity, size and flags may be examined or set with <b>CVectorCapacity</b>(), <b>CVectorGetCapacity</b>(), <b>CVectorSize</b>(), 
@@ -187,7 +192,8 @@ The valid flags are CVECTOR_FLAGS_NO_RELOCATION  and CVECTOR_FLAGS_NO_RESIZE whi
 <p>
 The functions <b>CVectorCapacity</b>() and <b>CVectorSize</b>() are implemented as macros and return the CVector <i>capacity</i> and
 <i>size</i> directly.  While they could be used as lvalues, such use is not recommended and is not guaranteed to work in future versions
-of CVector.  All other functions return 0 for normal completion, or the sum of one or more of the following non-zero error codes:
+of CVector.  The function <b>CVectorElementAt</b>() is implemented as a macro and returns a <i>void *</i> pointer into the data array
+with no bounds checking.   All other functions return 0 for normal completion, or the sum of one or more of the following non-zero error codes:
 <p>
 <blockquote>
 <table border="0">

@@ -95,6 +95,9 @@ int main(int argc, char **argv) {
         if (CVectorGetElementptr(vectorhandle, &velementptr, index)) 
             fprintf(stderr," Failed CVectorGetElement, index = %lu\n",(LUI)index);
         elementptr = (double *)velementptr;
+        if (velementptr != CVectorElementAt(vectorhandle, index)) {
+            fprintf(stderr," Failed CVectorGetElementAt, index = %lu\n",(LUI)index);
+        }
         if ((double)index != *elementptr) {
             fprintf(stderr," data mismatch array[%lu] = %g\n",
                     (LUI)index, *elementptr);

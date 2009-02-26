@@ -99,7 +99,12 @@ extern "C" {
     /* CVectorCreate -- create a CVector */
     
     int CVectorCreate(CVectorHandle FAR * vectorhandle, const size_t elementsize, const size_t capacity);
+    
+    /* CVectorElementAt -- return the element at the given index as a void pointer without checking
+       and without protection against relocation */
         
+#define CVectorElementAt(vectorhandle,index) ((void FAR *)(((char *)((vectorhandle)->array))+(index)*(vectorhandle)->elementsize))
+
     /* CVectorFree -- remove a CVector */
     
     int CVectorFree(CVectorHandle FAR * vectorhandle);
@@ -115,7 +120,7 @@ extern "C" {
     /* CVectorGetElementptr -- get a pointer to an element from a CVector */
     
     int CVectorGetElementptr(const CVectorHandle vectorhandle, void FAR ** elementptr, const size_t index);
-    
+        
     /* CVectorGetFlags - function to return the CVector flags */
     
     int CVectorGetFlags(const CVectorHandle vectorhandle, unsigned int FAR * flags);
