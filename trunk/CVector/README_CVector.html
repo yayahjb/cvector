@@ -9,8 +9,8 @@
 <h3 align="center">CVector -- ANSI C API for Dynamic Arrays</h3>
 <P>
 <center>
-Release 1.0.1<br />
-13 January 2009<br />
+Release 1.0.2<br />
+26 February 2009<br />
 &#169; 2008, 2009 Herbert J. Bernstein<br/>
 <script language="javascript" type="text/javascript">
 <!-- 
@@ -28,16 +28,17 @@ You may distribute the CVector API under the <a href=lgpl.txt style="text-decora
 <P>
 CVector is an ANSI C implementation of dynamic arrays to provide a crude approximation to the C++ vector class.
 <p>
-This release is a minor revision of release 1.0.0 of 8 January 2009 to update the Makefile for builds under MINGW.  There
+This release is a minor revision of release 1.0.0 of 8 January 2009 to update the Makefile for builds under MINGW,
+and on 26 February 2009 to add the macro CVectorElementAt.  There
 are no changes to the code.  The internal copy of libtool has been removed.
 <p>
 <h4>Installation</h4>
 <p>
 The CVector package is available at <a href="http://www.sourceforge.net/projects/cvector">www.sourceforge.net/projects/cvector</a>.
-A source tarball is available at <a href="http://downloads.sourceforge.net/cvector/CVector-1.0.1.tar.gz">downloads.sourceforge.net/cvector/CVector-1.0.1.tar.gz</a>.
+A source tarball is available at <a href="http://downloads.sourceforge.net/cvector/CVector-1.0.2.tar.gz">downloads.sourceforge.net/cvector/CVector-1.0.2.tar.gz</a>.
 Later tarballs may be available.
 <P>
-When the source tarball is dowloaded and unpacked, you should have a directory CVector-1.0.1.  To see the current settings for a build
+When the source tarball is dowloaded and unpacked, you should have a directory CVector-1.0.2.  To see the current settings for a build
 execute
 <p>
 make
@@ -56,7 +57,7 @@ PLEASE READ README_CVector.txt and lgpl.txt
  
  The current library link command is:
  
-   libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.1 -rpath /usr/local/lib
+   libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.2 -rpath /usr/local/lib
  
  The current library local, dynamic and static build commands are:
  
@@ -249,7 +250,7 @@ See the test program <a href="CVectorBasicTest.c">CVectorBasicTest.c</a>
 
 <hr>
 <font size="2">
-Updated 8 January 2009<br />
+Updated 22 March 2009<br />
 <script language="javascript" type="text/javascript">
 <!-- 
       var name = "yaya";
