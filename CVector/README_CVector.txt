@@ -1,7 +1,7 @@
                     CVector -- ANSI C API for Dynamic Arrays
 
-                                 Release 1.0.1
-                                13 January 2009
+                                 Release 1.0.2
+                                26 February 2009
                       (c) 2008, 2009 Herbert J. Bernstein
                       yaya at bernstein-plus-sons dot com
                You may distribute the CVector API under the LGPL
@@ -10,18 +10,19 @@
    approximation to the C++ vector class.
 
    This release is a minor revision of release 1.0.0 of 8 January 2009 to
-   update the Makefile for builds under MINGW. There are no changes to the
-   code. The internal copy of libtool has been removed.
+   update the Makefile for builds under MINGW, and on 26 February 2009 to 
+   add the macro CVectorElementAt. There are no changes to the code. The 
+   internal copy of libtool has been removed.
 
     Installation
 
    The CVector package is available at www.sourceforge.net/projects/cvector.
    A source tarball is available at
-   downloads.sourceforge.net/cvector/CVector-1.0.1.tar.gz. Later tarballs may
+   downloads.sourceforge.net/cvector/CVector-1.0.2.tar.gz. Later tarballs may
    be available.
 
    When the source tarball is dowloaded and unpacked, you should have a
-   directory CVector-1.0.1. To see the current settings for a build execute
+   directory CVector-1.0.2. To see the current settings for a build execute
 
    make
 
@@ -38,7 +39,7 @@
  
   The current library link command is:
  
-    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.1 -rpath /usr/local/lib
+    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.2 -rpath /usr/local/lib
  
   The current library local, dynamic and static build commands are:
  
@@ -250,5 +251,5 @@
 
      ----------------------------------------------------------------------
 
-   Updated 8 January 2009
+   Updated 22 March 2009
    yaya at bernstein-plus-sons dot com
