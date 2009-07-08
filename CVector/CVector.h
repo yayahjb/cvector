@@ -58,35 +58,35 @@ extern "C" {
 #ifdef CVECTOR_USE_FAR
 #include <malloc.h>
 #include <string.h>
-#define FAR __far
-#define MALLOC _fmalloc
-#define FREE _ffree
-#define MEMSET _fmemset
-#define MEMMOVE _fmemmove
+#define CVECTOR_FAR __far
+#define CVECTOR_MALLOC _fmalloc
+#define CVECTOR_FREE _ffree
+#define CVECTOR_MEMSET _fmemset
+#define CVECTOR_MEMMOVE _fmemmove
 #else
 #include <stdlib.h>
 #include <string.h>
-#define FAR
-#define MALLOC malloc
-#define FREE free
-#define MEMSET memset
-#define MEMMOVE memmove
+#define CVECTOR_FAR
+#define CVECTOR_MALLOC malloc
+#define CVECTOR_FREE free
+#define CVECTOR_MEMSET memset
+#define CVECTOR_MEMMOVE memmove
 #endif
     
     typedef struct {
         size_t size;             /* size of the vector      */
         size_t capacity;         /* capacity of the vector  */
         size_t elementsize;      /* size of an element      */
-        void FAR * array;        /* the array of elements   */
+        void CVECTOR_FAR * array;        /* the array of elements   */
         unsigned int flags;      /* flags                   */
     } CVector;
     
-    typedef CVector FAR * CVectorHandle;
+    typedef CVector CVECTOR_FAR * CVectorHandle;
     
     
     /*  CVectorAddElement -- add an element to a CVector */
     
-    int CVectorAddElement(const CVectorHandle vectorhandle, const void FAR * element);
+    int CVectorAddElement(const CVectorHandle vectorhandle, const void CVECTOR_FAR * element);
 
     /* CVectorCapacity -- macro to return the CVector capacity */
     
@@ -98,36 +98,36 @@ extern "C" {
 
     /* CVectorCreate -- create a CVector */
     
-    int CVectorCreate(CVectorHandle FAR * vectorhandle, const size_t elementsize, const size_t capacity);
+    int CVectorCreate(CVectorHandle CVECTOR_FAR * vectorhandle, const size_t elementsize, const size_t capacity);
     
     /* CVectorElementAt -- return the element at the given index as a void pointer without checking
        and without protection against relocation */
         
-#define CVectorElementAt(vectorhandle,index) ((void FAR *)(((char *)((vectorhandle)->array))+(index)*(vectorhandle)->elementsize))
+#define CVectorElementAt(vectorhandle,index) ((void CVECTOR_FAR *)(((char *)((vectorhandle)->array))+(index)*(vectorhandle)->elementsize))
 
     /* CVectorFree -- remove a CVector */
     
-    int CVectorFree(CVectorHandle FAR * vectorhandle);
+    int CVectorFree(CVectorHandle CVECTOR_FAR * vectorhandle);
     
     /* CVectorGetCapacity - function to return the CVector capacity */
     
-    int CVectorGetCapacity(const CVectorHandle vectorhandle, size_t FAR * capacity);
+    int CVectorGetCapacity(const CVectorHandle vectorhandle, size_t CVECTOR_FAR * capacity);
     
     /* CVectorGetElement -- get a copy of an element from a CVector */
     
-    int CVectorGetElement(const CVectorHandle vectorhandle, void FAR * element, const size_t index);
+    int CVectorGetElement(const CVectorHandle vectorhandle, void CVECTOR_FAR * element, const size_t index);
     
     /* CVectorGetElementptr -- get a pointer to an element from a CVector */
     
-    int CVectorGetElementptr(const CVectorHandle vectorhandle, void FAR ** elementptr, const size_t index);
+    int CVectorGetElementptr(const CVectorHandle vectorhandle, void CVECTOR_FAR ** elementptr, const size_t index);
         
     /* CVectorGetFlags - function to return the CVector flags */
     
-    int CVectorGetFlags(const CVectorHandle vectorhandle, unsigned int FAR * flags);
+    int CVectorGetFlags(const CVectorHandle vectorhandle, unsigned int CVECTOR_FAR * flags);
     
     /* CVectorGetSize - function to return the CVector size */
     
-    int CVectorGetSize(const CVectorHandle vectorhandle, size_t FAR * size);
+    int CVectorGetSize(const CVectorHandle vectorhandle, size_t CVECTOR_FAR * size);
         
     /* CVectorRemoveElement -- remove an element from a generic vector */
     
@@ -139,7 +139,7 @@ extern "C" {
         
     /* CVectorSetElement -- set a copy of an element into a CVector */
     
-    int CVectorSetElement(const CVectorHandle vectorhandle, const void FAR * element, const size_t index);
+    int CVectorSetElement(const CVectorHandle vectorhandle, const void CVECTOR_FAR * element, const size_t index);
 
     /* CVectorSetFags - function to set the CVector flags */
     
