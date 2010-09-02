@@ -103,7 +103,7 @@ extern "C" {
     /* CVectorElementAt -- return the element at the given index as a void pointer without checking
        and without protection against relocation */
         
-#define CVectorElementAt(vectorhandle,index) ((void CVECTOR_FAR *)(((char *)((vectorhandle)->array))+(index)*(vectorhandle)->elementsize))
+#define CVectorElementAt(vectorhandle,index) ((void CVECTOR_FAR *)(((char *)((vectorhandle)->array))+(index)*((vectorhandle)->elementsize)))
 
     /* CVectorFree -- remove a CVector */
     

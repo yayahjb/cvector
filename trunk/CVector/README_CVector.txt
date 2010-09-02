@@ -33,7 +33,7 @@
  PLEASE READ README_CVector.txt and lgpl.txt
  
   Before making the CVector library and example programs, check
-  that the chosen settings are corr
+  that the chosen settings are correct
  
   The current compile command is:
  
@@ -41,7 +41,7 @@
  
   The current library link command is:
  
-    libtool --mode=link  gcc -version-info 1:0:1 -release 1.0.2 -rpath /usr/local/lib
+    libtool --mode=link  gcc -version-info 2:0:0 -release 1.0.3 -rpath /usr/local/lib
  
   The current library local, dynamic and static build commands are:
  
@@ -253,5 +253,5 @@
 
      ----------------------------------------------------------------------
 
-   Updated 7 July 2009
+   Updated 8 July 2009
    yaya at bernstein-plus-sons dot com

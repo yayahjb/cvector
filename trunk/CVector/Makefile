@@ -5,7 +5,6 @@
 #  Created by Herbert J. Bernstein on 12/03/08.
 #  Copyright 2008 Herbert J. Bernstein. All rights reserved.
 #  rev 13 Jan 09 -- HJB
-#  rev 1 Sep 10 -- Takanori Matsuura - change -shared to -dynamic
 #
 #
 
@@ -92,7 +91,7 @@ endif
 COMPILE_COMMAND        =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
 LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -no-undefined -rpath $(INSTALL_PREFIX)/lib
 BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
-BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -dynamic -I $(INSTALL_PREFIX)/include
+BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -shared -I $(INSTALL_PREFIX)/include
 BUILD_COMMAND_STATIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static -I $(INSTALL_PREFIX)/include
 INSTALL_COMMAND        =  $(LIBTOOL) --mode=install cp
 INSTALL_FINISH_COMMAND =  $(LIBTOOL) --mode=finish
