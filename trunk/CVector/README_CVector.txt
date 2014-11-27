@@ -1,30 +1,36 @@
+   Get CVector at SourceForge.net. Fast, secure and Free Open Source software
+   downloads
+
+     ----------------------------------------------------------------------
+
                     CVector -- ANSI C API for Dynamic Arrays
 
-                                 Release 1.0.3
-                                  7 July 2009
-                      (c) 2008, 2009 Herbert J. Bernstein
+                                 Release 1.0.4
+                                26 November 2014
+                   (c) 2008, 2009, 2014 Herbert J. Bernstein
                       yaya at bernstein-plus-sons dot com
                You may distribute the CVector API under the LGPL
 
    CVector is an ANSI C implementation of dynamic arrays to provide a crude
    approximation to the C++ vector class.
 
-   This release is a minor revision of release 1.0.0 of 8 January 2009 to
-   update the Makefile for builds under MINGW, on 26 February 2009 to add the
-   macro CVectorElementAt, and on 7 July 2009 to change the macro to
-   CVECTOR_FAR and similarly change the macros that handle memmove and
-   memset. There are no changes to the code. The internal copy of libtool has
-   been removed.
+   Release 1.0.4 adds a CMakeLists.txt file to the kit and changes the test
+   program to allow normal output to be written to a specified file. Release
+   1.0.3 was is a minor revision of release 1.0.0 of 8 January 2009 to update
+   the Makefile for builds under MINGW, on 26 February 2009 to add the macro
+   CVectorElementAt, and on 7 July 2009 to change the macro to CVECTOR_FAR
+   and similarly change the macros that handle memmove and memset. There are
+   no changes to the code. The internal copy of libtool has been removed.
 
     Installation
 
    The CVector package is available at www.sourceforge.net/projects/cvector.
    A source tarball is available at
-   downloads.sourceforge.net/cvector/CVector-1.0.3.tar.gz. Later tarballs may
+   downloads.sourceforge.net/cvector/CVector-1.0.4.tar.gz. Later tarballs may
    be available.
 
    When the source tarball is dowloaded and unpacked, you should have a
-   directory CVector-1.0.3. To see the current settings for a build execute
+   directory CVector-1.0.4. To see the current settings for a build execute
 
    make
 
@@ -41,7 +47,7 @@
  
   The current library link command is:
  
-    libtool --mode=link  gcc -version-info 2:0:0 -release 1.0.3 -rpath /usr/local/lib
+    libtool --mode=link  gcc -version-info 2:0:0 -release 1.0.4 -rpath /usr/local/lib
  
   The current library local, dynamic and static build commands are:
  
@@ -253,5 +259,5 @@
 
      ----------------------------------------------------------------------
 
-   Updated 8 July 2009
+   Updated 26 November 2014
    yaya at bernstein-plus-sons dot com
