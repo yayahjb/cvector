@@ -52,7 +52,19 @@ int main(int argc, char **argv) {
     unsigned int flags;
     size_t size, capacity;
     
-    fprintf(stdout," Test 0: Create vector and load it with 1000000 elements.\n");
+    FILE * out;
+    
+    out = stdout;
+    
+    if (argc > 1) {
+        out = fopen(argv[1],"w+");
+        if (!out) {
+            fprintf(stderr," Failed to open output file %s\n", argv[1]);
+            exit(1);
+        }
+    }
+    
+    fprintf(out," Test 0: Create vector and load it with 1000000 elements.\n");
     CVectorCreate(&vectorhandle,sizeof(double),1);
     for (index=0; index<1000000; index++) {
         element = (double)index;
@@ -67,17 +79,17 @@ int main(int argc, char **argv) {
             if (size != index+1) {
                 fprintf(stderr,"Size mismatch index+1 %lu, size %lu.\n",(LUI)index+1,(LUI)size);
             }
-            fprintf(stdout,"Size %lu, capacity %lu.\n", (LUI)size, (LUI)capacity);
+            fprintf(out,"Size %lu, capacity %lu.\n", (LUI)size, (LUI)capacity);
         }
     }
-    fprintf(stdout," Test 1: Reference elements of CVector as an array.\n");
+    fprintf(out," Test 1: Reference elements of CVector as an array.\n");
     for (index=0; index<1000000; index++) {
         if ((double)index != ((double *)(vectorhandle->array))[index]) {
             fprintf(stderr," data mismatch array[%lu] = %g\n",
                     (LUI)index, ((double *)(vectorhandle->array))[index]);
         }
     }
-    fprintf(stdout," Test 2: Reference elements of CVector via CVectorGetElement.\n");
+    fprintf(out," Test 2: Reference elements of CVector via CVectorGetElement.\n");
     for (index=0; index<(size_t)1000000; index++) {
         if (CVectorGetElement(vectorhandle, &element, index)) 
             fprintf(stderr," Failed CVectorGetElement, index = %lu\n",(LUI)index);
@@ -90,7 +102,7 @@ int main(int argc, char **argv) {
         This will also set the CVECTOR_FLAGS_NO_RELOCATION 
         Will then reset the flag.
      */
-    fprintf(stdout," Test 3: Reference elements of CVector via CVectorGetElementptr.\n");
+    fprintf(out," Test 3: Reference elements of CVector via CVectorGetElementptr.\n");
     for (index=0; index<(size_t)1000000; index++) {
         if (CVectorGetElementptr(vectorhandle, &velementptr, index)) 
             fprintf(stderr," Failed CVectorGetElement, index = %lu\n",(LUI)index);
@@ -111,7 +123,7 @@ int main(int argc, char **argv) {
     if (CVectorSetFlags(vectorhandle,flags))
         fprintf(stderr,"Call to CVectorSetFlags failed.\n");
     
-    fprintf(stdout," Test 4: Set elements of CVector as an array\n");
+    fprintf(out," Test 4: Set elements of CVector as an array\n");
     for (index=0; index<(size_t)1000000; index++) {
         ((double *)(vectorhandle->array))[index] = (double)(1000000-index);
     }
@@ -121,7 +133,7 @@ int main(int argc, char **argv) {
                     (LUI)index, ((double *)(vectorhandle->array))[index]);
         }
     }
-    fprintf(stdout," Test 5: Set elements of CVector via CVectorSetElement.\n");
+    fprintf(out," Test 5: Set elements of CVector via CVectorSetElement.\n");
     for (index=0; index<(size_t)1000000; index++) {
         element = (double)(index-1000000);
         if (CVectorSetElement(vectorhandle,&element,1000000-index))
@@ -133,7 +145,7 @@ int main(int argc, char **argv) {
                 (LUI)index, ((double *)(vectorhandle->array))[1000000-index]);
         }
     }
-    fprintf(stdout," Test 6: Remove elements of CVector via CVectorRemoveElement.\n");
+    fprintf(out," Test 6: Remove elements of CVector via CVectorRemoveElement.\n");
     for (index=0; index<(size_t)2000; index++) {
         ((double *)(vectorhandle->array))[index] = (double)(index);
     }
@@ -147,7 +159,7 @@ int main(int argc, char **argv) {
                 (LUI)index, ((double *)(vectorhandle->array))[index]);
         }
     }
-    fprintf(stdout," Test 7: Remove all elements of CVector via CVectorClear.\n");
+    fprintf(out," Test 7: Remove all elements of CVector via CVectorClear.\n");
     if (CVectorClear(vectorhandle))
         fprintf(stderr," Failed CVectorClear\n");
     if (CVectorSize(vectorhandle) !=0) {

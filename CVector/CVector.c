@@ -51,11 +51,11 @@ extern "C" {
         
         size_t cap = capacity;
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
         *vectorhandle = (CVectorHandle)CVECTOR_MALLOC(sizeof(CVector));
         
-        if ((*vectorhandle==NULL)) {
+        if (*vectorhandle==NULL) {
             return CVECTOR_MALLOC_FAILED;
         }
         
@@ -85,7 +85,7 @@ extern "C" {
         
         int errorcode;
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
         if ( (vectorhandle->flags&CVECTOR_FLAGS_NO_RESIZE) ) { return CVECTOR_NO_RESIZE; }
         
@@ -121,9 +121,9 @@ extern "C" {
     
     int CVectorGetElement(const CVectorHandle vectorhandle, void CVECTOR_FAR * element, const size_t index) {
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
-        if (index >= 0 && index < vectorhandle->size) {
+        if (index < vectorhandle->size) {
             
             CVECTOR_MEMMOVE((char *)element,((char *)(vectorhandle->array))+index*vectorhandle->elementsize,
                     vectorhandle->elementsize);
@@ -142,9 +142,9 @@ extern "C" {
     
     int CVectorGetElementptr(const CVectorHandle vectorhandle, void CVECTOR_FAR ** elementptr, const size_t index) {
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
-        if (index >= 0 && index < vectorhandle->size) {
+        if (index < vectorhandle->size) {
             
             *elementptr = (void CVECTOR_FAR*)(((char *)(vectorhandle->array))+index*vectorhandle->elementsize);
             
@@ -168,7 +168,7 @@ extern "C" {
         
         int errorcode;
         
-        if ((vectorhandle==NULL) ) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
         if (index >= vectorhandle->capacity) {
             
@@ -189,7 +189,7 @@ extern "C" {
         }
         
         
-        if (index >= 0 && index < vectorhandle->capacity) {
+        if (index < vectorhandle->capacity) {
             
             CVECTOR_MEMMOVE(((char *)(vectorhandle->array))+index*vectorhandle->elementsize,(char *)element,
                     vectorhandle->elementsize);
@@ -217,11 +217,11 @@ extern "C" {
     
     int CVectorRemoveElement(const CVectorHandle vectorhandle, const size_t index) {
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
-        if ((vectorhandle->flags&CVECTOR_FLAGS_NO_RELOCATION)) { return CVECTOR_NO_RELOCATION; }
+        if (vectorhandle->flags&CVECTOR_FLAGS_NO_RELOCATION) { return CVECTOR_NO_RELOCATION; }
         
-        if (index >= vectorhandle->size || index < 0 ) { return CVECTOR_NOT_FOUND; }
+        if (index >= vectorhandle->size) { return CVECTOR_NOT_FOUND; }
         
         if (index == vectorhandle->size-1) {
             vectorhandle->size--;
@@ -240,7 +240,7 @@ extern "C" {
     
     int CVectorClear(const CVectorHandle vectorhandle) {
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
         if (vectorhandle->flags & CVECTOR_FLAGS_NO_RESIZE) { return CVECTOR_NO_RESIZE; }
         
@@ -254,7 +254,7 @@ extern "C" {
     
     int CVectorFree(CVectorHandle CVECTOR_FAR * vectorhandle) {
         
-        if ((vectorhandle==NULL)) { return CVECTOR_BAD_ARGUMENT; }
+        if (vectorhandle==NULL) { return CVECTOR_BAD_ARGUMENT; }
         
         if (*vectorhandle) {
             
