@@ -68,6 +68,19 @@ set(CV__BIN       "${CVector_BINARY_DIR}/bin" )
 set(CV__LIB       "${CVector_BINARY_DIR}/lib" )
 
 #
+# CV_REQUIRE_DIRECTORY -- require directory dir
+#
+macro(CV_REQUIRE_DIRECTORY dir)
+  if (NOT EXISTS "${dir}")
+    file(MAKE_DIRECTORY "${dir}")
+    CBF_DEBUG_MESSAGE("Created directory ${dir}")
+  endif (NOT EXISTS "${dir}")
+endmacro(CV_REQUIRE_DIRECTORY)
+
+CV_REQUIRE_DIRECTORY(${CV__BIN})
+CV_REQUIRE_DIRECTORY(${CV__LIB})
+
+#
 # Source files
 #
 set(
@@ -125,7 +138,9 @@ macro(add_target target source dependencies libraries)
 	target_link_libraries(${target} ${libraries})
 endmacro()
 
-add_target(CVectorBasicTest "${CV__EXAMPLES}/CVectorBasicTest.c" CV_static "${CV_STATIC_LIBRARY_PATH}")
+
+add_executable(CVectorBasicTest "${CV__EXAMPLES}/CVectorBasicTest.c")
+set_target_properties(CVectorBasicTest PROPERTIES LINK_LIBRARIES CV_static)
 
 #
 # install
