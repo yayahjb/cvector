@@ -5,23 +5,24 @@
 
                     CVector -- ANSI C API for Dynamic Arrays
 
-                                Release 1.0.4.1
-                                   1 May 2018
-                    © 2008, 2009, 2014 Herbert J. Bernstein
+                                 Release 1.0.5
+                                  21 Jan 2022
+                 © 2008, 2009, 2014, 2022 Herbert J. Bernstein
                       yaya at bernstein-plus-sons dot com
                You may distribute the CVector API under the LGPL
 
    CVector is an ANSI C implementation of dynamic arrays to provide a crude
    approximation to the C++ vector class.
 
-   Release 1.0.4.1 is a move from Sourceforge to Github. Release 1.0.4 adds a
-   CMakeLists.txt file to the kit and changes the test program to allow
-   normal output to be written to a specified file. Release 1.0.3 was is a
-   minor revision of release 1.0.0 of 8 January 2009 to update the Makefile
-   for builds under MINGW, on 26 February 2009 to add the macro
-   CVectorElementAt, and on 7 July 2009 to change the macro to CVECTOR_FAR
-   and similarly change the macros that handle memmove and memset. There are
-   no changes to the code. The internal copy of libtool has been removed.
+   Release 1.0.5 is a clean-up of the Makefile Release 1.0.4.1 is a move from
+   Sourceforge to Github. Release 1.0.4 adds a CMakeLists.txt file to the kit
+   and changes the test program to allow normal output to be written to a
+   specified file. Release 1.0.3 was is a minor revision of release 1.0.0 of
+   8 January 2009 to update the Makefile for builds under MINGW, on 26
+   February 2009 to add the macro CVectorElementAt, and on 7 July 2009 to
+   change the macro to CVECTOR_FAR and similarly change the macros that
+   handle memmove and memset. There are no changes to the code. The internal
+   copy of libtool has been removed.
 
     Installation
 
