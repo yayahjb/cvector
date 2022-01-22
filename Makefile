@@ -5,6 +5,7 @@
 #  Created by Herbert J. Bernstein on 12/03/08.
 #  Copyright 2008 Herbert J. Bernstein. All rights reserved.
 #  rev 13 Jan 09 -- HJB
+#  rev 21 Jan 22 -- HJB
 #
 #
 
@@ -35,14 +36,14 @@
 #**********************************************************************/
 
 # Version string
-VERSION = 2:0:0
-RELEASE = 1.0.4
+VERSION = 2:0:1
+RELEASE = 1.0.5
 
 
 #
 # Compiler and compilation flags
 #
-CC	= gcc
+CC	?= gcc
 ifneq ($(MSYSTEM),MINGW32)
 CFLAGS  = -g -O2  -Wall -ansi -pedantic
 else
@@ -74,10 +75,7 @@ SRC      = $(ROOT)
 INC      = $(ROOT)
 EXAMPLES = $(ROOT)
 TESTDATA = $(ROOT)
-ifndef INSTALL_PREFIX
-INSTALL_PREFIX = /usr/local
-#INSTALL_PREFIX  = $(HOME)
-endif
+CVECTOR_PREFIX ?= /usr/local
 
 #
 # Include directories
@@ -88,11 +86,11 @@ else
 INCLUDES = -I$(INC)
 endif
 
-COMPILE_COMMAND        =  $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
-LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -no-undefined -rpath $(INSTALL_PREFIX)/lib
-BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(INCLUDES)
-BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -shared -I $(INSTALL_PREFIX)/include
-BUILD_COMMAND_STATIC   =  $(LIBTOOL) --mode=link $(CC) $(CFLAGS) -static -I $(INSTALL_PREFIX)/include
+COMPILE_COMMAND        =  $(LIBTOOL) --tag=CC --mode=compile $(CC) $(CFLAGS) $(INCLUDES) $(WARNINGS) -c
+LIBRARY_LINK_COMMAND   =  $(LIBTOOL) --tag=CC --mode=link  $(CC) -version-info $(VERSION) -release $(RELEASE) -no-undefined -rpath $(CVECTOR_PREFIX)/lib
+BUILD_COMMAND_LOCAL    =  $(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) $(INCLUDES)
+BUILD_COMMAND_DYNAMIC  =  $(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -shared -I $(CVECTOR_PREFIX)/include
+BUILD_COMMAND_STATIC   =  $(LIBTOOL) --tag=CC --mode=link $(CC) $(CFLAGS) -static -I $(CVECTOR_PREFIX)/include
 INSTALL_COMMAND        =  $(LIBTOOL) --mode=install cp
 INSTALL_FINISH_COMMAND =  $(LIBTOOL) --mode=finish
 
@@ -153,7 +151,7 @@ default:
 	@echo ' '
 	@echo ' The current values are :'
 	@echo ' '
-	@echo '   $(INSTALL_PREFIX) '	
+	@echo '   $(CVECTOR_PREFIX) '	
 	@echo '   $(INSTALL_COMMAND) '	
 	@echo '   $(INSTALL_FINISH) '	
 	@echo ' '
@@ -184,22 +182,22 @@ all:	$(LIB) $(BIN) $(SOURCE) $(HEADERS) \
 		$(LIB)/libCVector.$(LIB_EXT) \
 		$(BIN)/CVectorBasicTest
 		
-install:  all $(INSTALL_PREFIX) $(INSTALL_PREFIX)/lib $(INSTALL_PREFIX)/include \
+install:  all $(CVECTOR_PREFIX) $(CVECTOR_PREFIX)/lib $(CVECTOR_PREFIX)/include \
           $(INC) $(LIB)/libCVector.$(LIB_EXT)  $(INC)/CVector.h
-		  $(INSTALL_COMMAND) $(LIB)/libCVector.$(LIB_EXT) $(INSTALL_PREFIX)/lib/libCVector.$(LIB_EXT)
-		  $(INSTALL_FINISH_COMMAND) $(INSTALL_PREFIX)/lib/libCVector.$(LIB_EXT)
-		  -cp $(INSTALL_PREFIX)/include/CVector.h $(INSTALL_PREFIX)/include/CVector_old.h
-		  cp $(INC)/CVector.h $(INSTALL_PREFIX)/include/CVector.h
-		  chmod 644 $(INSTALL_PREFIX)/include/CVector.h
+		  $(INSTALL_COMMAND) $(LIB)/libCVector.$(LIB_EXT) $(CVECTOR_PREFIX)/lib/libCVector.$(LIB_EXT)
+		  $(INSTALL_FINISH_COMMAND) $(CVECTOR_PREFIX)/lib/libCVector.$(LIB_EXT)
+		  -cp $(CVECTOR_PREFIX)/include/CVector.h $(CVECTOR_PREFIX)/include/CVector_old.h
+		  cp $(INC)/CVector.h $(CVECTOR_PREFIX)/include/CVector.h
+		  chmod 644 $(CVECTOR_PREFIX)/include/CVector.h
 		  echo "Testing final install dynamic"
 		  $(BUILD_COMMAND_DYNAMIC)  $(EXAMPLES)/CVectorBasicTest.c \
-		  -L$(INSTALL_PREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_dynamic
+		  -L$(CVECTOR_PREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_dynamic
 		  $(BIN)/CVectorBasicTest_dynamic > $(TESTDATA)/CVectorBasicTest_dynamic.lst
 		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
 		    $(TESTDATA)/CVectorBasicTest_dynamic.lst
 		  echo "Testing final install static"
 		  $(BUILD_COMMAND_STATIC) $(EXAMPLES)/CVectorBasicTest.c \
-		  -L$(INSTALL_PREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_static
+		  -L$(CVECTOR_PREFIX)/lib -lCVector -o $(BIN)/CVectorBasicTest_static
 		  $(BIN)/CVectorBasicTest_static > $(TESTDATA)/CVectorBasicTest_static.lst
 		  diff -b -c $(TESTDATA)/CVectorBasicTest_orig.lst \
 		    $(TESTDATA)/CVectorBasicTest_static.lst
@@ -209,17 +207,17 @@ install:  all $(INSTALL_PREFIX) $(INSTALL_PREFIX)/lib $(INSTALL_PREFIX)/include 
 #
 # Directories
 #
-$(INSTALL_PREFIX):
-	mkdir -p $(INSTALL_PREFIX)
+$(CVECTOR_PREFIX):
+	mkdir -p $(CVECTOR_PREFIX)
 
-$(INSTALL_PREFIX)/lib:  $(INSTALL_PREFIX)
-	mkdir -p $(INSTALL_PREFIX)/lib
+$(CVECTOR_PREFIX)/lib:  $(CVECTOR_PREFIX)
+	mkdir -p $(CVECTOR_PREFIX)/lib
 
-$(INSTALL_PREFIX)/bin:  $(INSTALL_PREFIX)
-	mkdir -p $(INSTALL_PREFIX)/bin
+$(CVECTOR_PREFIX)/bin:  $(CVECTOR_PREFIX)
+	mkdir -p $(CVECTOR_PREFIX)/bin
 
-$(INSTALL_PREFIX)/include:  $(INSTALL_PREFIX)
-	mkdir -p $(INSTALL_PREFIX)/include
+$(CVECTOR_PREFIX)/include:  $(CVECTOR_PREFIX)
+	mkdir -p $(CVECTOR_PREFIX)/include
 	
 
 $(LIB):
