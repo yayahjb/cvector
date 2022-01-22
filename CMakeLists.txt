@@ -38,7 +38,7 @@
 cmake_minimum_required (VERSION 2.8.7)
 
 project (CVector C)
-set(CV_APIVERS,"2.0.0")
+set(CV_APIVERS,"2.0.1")
 
 #
 # Environment Variables
@@ -73,7 +73,7 @@ set(CV__LIB       "${CVector_BINARY_DIR}/lib" )
 macro(CV_REQUIRE_DIRECTORY dir)
   if (NOT EXISTS "${dir}")
     file(MAKE_DIRECTORY "${dir}")
-    CBF_DEBUG_MESSAGE("Created directory ${dir}")
+    MESSAGE("Created directory ${dir}")
   endif (NOT EXISTS "${dir}")
 endmacro(CV_REQUIRE_DIRECTORY)
 
